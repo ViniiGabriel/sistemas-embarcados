@@ -6,6 +6,7 @@
 #define MAX_ARQUIVOS 12
 #define TAM_NOME 8
 #define TAM_BLOCO 32
+#define NUM_BLOCOS 64
 #define PONTEIROS_POR_BLOCO 16
 #define BLOCO_INVALIDO 0xFFFF
 
