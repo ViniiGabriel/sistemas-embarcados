@@ -8,28 +8,28 @@
 
 void formataSA() {
   uint16_t primeiro_livre = 0;
-  memoria_fwrite(&primeiro_livre, 0, sizeof(uint16_t));
+  memoria_fwrite(&primeiro_livre, ADDR_CABECALHO, sizeof(uint16_t));
 
   Inodo inodo_vazio;
   memset(&inodo_vazio, 0, sizeof(Inodo));
+  inodo_vazio.ponteiro_indireto = BLOCO_INVALIDO;
 
-  for (size_t i = 0; i < 12; i++) {
-    uint16_t endereco_inodo = 2 + (i * sizeof(Inodo));
+  for (size_t i = 0; i < NUM_INODOS; i++) {
+    uint16_t endereco_inodo = ADDR_INODOS + (i * sizeof(Inodo));
 
     memoria_fwrite(&inodo_vazio, endereco_inodo, sizeof(Inodo));
   }
 
   for (size_t i = 0; i < NUM_BLOCOS; i++) {
     uint16_t prox_bloco;
-    uint16_t endereco_base = 2 + (12 * sizeof(Inodo));
 
     if (i == NUM_BLOCOS - 1) {
-      prox_bloco = 0xFFFF;
+      prox_bloco = BLOCO_INVALIDO;
     } else {
       prox_bloco = i + 1;
     }
 
-    uint16_t endereco_escrita = endereco_base + (i * 2);
+    uint16_t endereco_escrita = ADDR_PONTEIROS + (i * 2);
 
     memoria_fwrite(&prox_bloco, endereco_escrita, sizeof(uint16_t));
   }
@@ -67,7 +67,7 @@ void desaloca_bloco(uint16_t bloco) {
 }
 
 void escreve_inodo(int id, Inodo *inodo) {
-  if (id < 0 || id >= 12) {
+  if (id < 0 || id >= NUM_INODOS) {
     return;
   }
 
@@ -77,7 +77,7 @@ void escreve_inodo(int id, Inodo *inodo) {
 }
 
 void le_inodo(int id, Inodo *inodo) {
-  if (id < 0 || id >= 12) {
+  if (id < 0 || id >= NUM_INODOS) {
     return;
   }
 

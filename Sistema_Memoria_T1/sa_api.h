@@ -7,19 +7,27 @@
 #include <stdio.h>
 
 struct ARQUIVO {
-  uint8_t em_uso;   // 1 se este ponteiro ARQUIVO está aberto
-  uint8_t id_inodo; // Qual dos 12 inodos (0 a 11) ele representa
-  uint16_t
-      posicao; // Cursor atual de leitura/escrita (usado pelo fseek e ftell!)
-  char modo;   // 'r', 'w', etc.
+  uint8_t em_uso;
+  uint8_t id_inodo;
+  uint16_t posicao;
+  char modo;
 };
 
-void meu_fopen(const char *nome, const char *modo);
+extern ARQUIVO descritores_abertos[4];
+
+// Camada 4 - API do Sistema de Arquivos
+void inicializa_SA();
+void formata_SA();
+
+ARQUIVO *meu_fopen(const char *nome, const char *modo);
 void meu_fwrite(ARQUIVO *arq, uint8_t *buffer, uint16_t tam);
 void meu_fread(ARQUIVO *arq, uint8_t *buffer, uint16_t tam);
-void meufseek();
-void meu_ftell();
-void meu_feof();
-void meu_fclose();
+int meu_fseek(ARQUIVO *arq, int32_t offset, int whence);
+uint16_t meu_ftell(ARQUIVO *arq);
+int meu_feof(ARQUIVO *arq);
+void meu_fclose(ARQUIVO *arq);
+
+// Camada de Aplicacao
+void lista_todos();
 
 #endif

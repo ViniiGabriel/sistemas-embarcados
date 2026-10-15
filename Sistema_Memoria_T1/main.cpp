@@ -1,48 +1,47 @@
 #include "sa.h"
-#include "sa_api.h" // (Ou o cabeçalho onde colocou as suas funções)
+#include "sa_api.h"
 #include <stdio.h>
 #include <string.h>
 
-// Apenas para garantir que o compilador conhece a função da memória caso não
-// esteja no sa_api.h
-void memoria_init();
-void formata_SA();
-
 int main(void) {
-  printf("A iniciar o Sistema de Ficheiros...\n");
-
-  // Nota: Se a sua função inicializa_SA() ainda não existir,
-  // chame diretamente a memoria_init() aqui para testar a Camada 2!
-  memoria_init();
-
-  // Chama a formatação que acabámos de criar
-  formataSA();
-
-  printf(
-      "Formatacao concluida! O ficheiro PARTICAO.BIN deve ter sido gerado.\n");
-
-  /* ==========================================================
-     COMENTADO TEMPORARIAMENTE PARA TESTAR APENAS A FASE 1
-     Descomente isto apenas quando implementar a Camada 4!
-     ==========================================================
   char buffer[70], a;
   ARQUIVO *A, *B, *C;
 
-  printf("Tecle [ENTER] para iniciar\r");
+  printf("Tecle [ENTER] para iniciar\n");
   while (1) {
     a = getchar();
-    if (a == 13)
+    if (a == 13 || a == 10)
       break;
   }
-  printf("OK \r");
+  printf("OK\n");
+
+  inicializa_SA();
+  formata_SA(); // realizado apenas 1 vez
 
   A = meu_fopen("UFSC", "w");
   strcpy(buffer, "Oi mundo, teste de mensagemXXX");
   meu_fwrite(A, (uint8_t *)buffer, strlen(buffer));
   meu_fclose(A);
 
-  // ... (restante código do PDF) ...
-  */
+  B = meu_fopen("Fabio", "w");
+  strcpy(buffer, "Oi mundo, teste de mensagemXXX");
+  meu_fwrite(B, (uint8_t *)buffer, strlen(buffer));
+
+  strcpy(buffer, " Prof: FABIO");
+  meu_fwrite(B, (uint8_t *)buffer, strlen(buffer));
+
+  strcpy(buffer, " de la Rocha UFSC Ararangua");
+  meu_fwrite(B, (uint8_t *)buffer, strlen(buffer));
+  meu_fclose(B);
+
+  C = meu_fopen("Fabio", "r");
+  meu_fseek(C, 19, SEEK_SET);
+  meu_fread(C, (uint8_t *)buffer, 8);
+  buffer[8] = 0;
+  printf("Lido=%s\n", buffer);
+  meu_fclose(C);
+
+  lista_todos();
 
   return 0;
 }

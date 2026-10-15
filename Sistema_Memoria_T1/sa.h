@@ -9,23 +9,24 @@
 #define NUM_BLOCOS 64
 #define BLOCO_INVALIDO 0xFFFF
 
-#define ADDR_CABECALHO 0
-#define ADDR_INODOS 2
-#define ADDR_PONTEIROS (ADDR_INODOS + (NUM_INODOS + sizeof(Inodo)))
-#define ADDR_DADOS (ADDR_PONTEIROS + (NUM_BLOCOS * 2))
-
-void formataSA();
-uint16_t aloca_bloco();
-void desaloca_bloco();
-void le_inodo();
-void escreve_inodo();
-
-struct Inodo {
+struct __attribute__((packed)) Inodo {
   uint8_t status;
   char nome[8];
   uint16_t tamanho;
   uint8_t bloco_direto[32];
   uint16_t ponteiro_indireto;
 };
+
+#define ADDR_CABECALHO 0
+#define ADDR_INODOS 2
+#define ADDR_PONTEIROS (ADDR_INODOS + (NUM_INODOS * sizeof(Inodo)))
+#define ADDR_DADOS (ADDR_PONTEIROS + (NUM_BLOCOS * 2))
+#define ADDR_BLOCO_DADOS(bloco) (ADDR_DADOS + ((bloco) * TAM_BLOCOS))
+
+void formataSA();
+uint16_t aloca_bloco();
+void desaloca_bloco(uint16_t bloco);
+void le_inodo(int id, Inodo *inodo);
+void escreve_inodo(int id, Inodo *inodo);
 
 #endif
